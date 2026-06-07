@@ -185,11 +185,10 @@ class ilMultiVcConfigGUI extends ilPluginConfigGUI
         $table_gui = new ilMultiVcConnTableGUI($this, 'configure');
         $table_gui->init($this);
         $html = $table_gui->getHTML();
-        if($table_gui->isWebex()) {
-            $tpl->addJavaScript('./public/Customizing/global/plugins/Services/Repository/RepositoryObject/MultiVc/templates/webex/js/modal.integration.js');
-            $html .= file_get_contents(dirname(__FILE__) . '/../templates/webex/html/modal.integration.html');
-            #var_dump($modal); exit;
-        }
+        // The Webex "integration modal" feature was dead code (the JS was syntactically
+        // broken, the iframe src was never set dynamically) and embedded a foreign,
+        // hardcoded OAuth client_id/redirect_uri. The real Webex OAuth runs via
+        // ilApiWebexIntegration::webexAuthorize() with dynamic config values.
         $tpl->setContent($html);
     }
 

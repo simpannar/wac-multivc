@@ -175,8 +175,9 @@ class ilApiEdudip implements ilApiInterface
 
             $curl = new ilCurlConnection($url);
             $curl->init(false);
-            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
-            $curl->setOpt(CURLOPT_SSL_VERIFYHOST, false);
+            // Verify TLS peer and host — edudip serves a valid certificate; never disable in production.
+            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, true);
+            $curl->setOpt(CURLOPT_SSL_VERIFYHOST, 2);
             #$curl->setOpt(CURLOPT_CONNECTTIMEOUT, $timeout);
             $curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
             $curl->setOpt(CURLOPT_MAXREDIRS, $maxRedirects);

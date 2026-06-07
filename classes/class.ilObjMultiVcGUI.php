@@ -2625,7 +2625,9 @@ class ilObjMultiVcGUI extends ilObjectPluginGUI
         $tpl->addJavaScript("./public/Customizing/global/plugins/Services/Repository/RepositoryObject/MultiVc/templates/default/tpl.window_redirect.js", true, 3);
         $my_tpl = new ilTemplate("./public/Customizing/global/plugins/Services/Repository/RepositoryObject/MultiVc/templates/default/tpl.window_redirect.html", true, true);
         $my_tpl->setVariable("REDIRECTMSG", $this->lng->txt('rep_robj_xmvc_redirect_msg'));
-        $my_tpl->setVariable("REDIRECTURL", $redirectUrl);
+        // Emit as a JSON-encoded JS string literal (the template no longer wraps it in quotes)
+        // to prevent breaking out of the JS string context via crafted request URIs.
+        $my_tpl->setVariable("REDIRECTURL", json_encode((string) $redirectUrl));
         $tpl->setContent($my_tpl->get());
     }
 

@@ -682,7 +682,7 @@ class ilObjMultiVc extends ilObjectPlugin implements ilLPStatusPluginInterface
         if ($entry == null) {
             return $defEntry;
         }
-        if (!is_array(unserialize($entry['log']))) {
+        if (!is_array(unserialize($entry['log'], ['allowed_classes' => false]))) {
             $entry['log'] = $defEntry['log'];
         }
         return array_merge($defEntry, $entry, ['entries' => 1]);
@@ -698,7 +698,7 @@ class ilObjMultiVc extends ilObjectPlugin implements ilLPStatusPluginInterface
 
         // Logging Details
         $log = array_replace(
-            unserialize($currentMax['log']),
+            unserialize($currentMax['log'], ['allowed_classes' => false]),
             [$details['svrUrl'] => $details['allParentMeetingsParticipantsCount']]
         );
 

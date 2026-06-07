@@ -152,10 +152,11 @@ class ilMultiVcLpUserResultsGUI extends ilTable2GUI
         $dtMeetingStart = new ilDateTime($a_set['start_time'], IL_CAL_UNIX);
         $meetingStart = $dtMeetingStart->get(IL_CAL_FKT_DATE, 'Y-m-d H:i:s', $this->dic->user()->getTimeZone());
         */
-        $this->tpl->setVariable('TITLE', $a_set['title']);
+        // Title and guest display name may contain untrusted input — escape against stored XSS.
+        $this->tpl->setVariable('TITLE', htmlspecialchars((string) $a_set['title'], ENT_QUOTES));
         $this->tpl->setVariable('MEETING_START', $a_set['meeting_start']);
         $this->tpl->setVariable('MEETING_END', $a_set['meeting_end']);
-        $this->tpl->setVariable('DISPLAY_NAME', $a_set['display_name']);
+        $this->tpl->setVariable('DISPLAY_NAME', htmlspecialchars((string) $a_set['display_name'], ENT_QUOTES));
         $this->tpl->setVariable('ROLE', $a_set['role']);
         $this->tpl->setVariable('USER_START', $a_set['user_start']);
         $this->tpl->setVariable('USER_END', $a_set['user_end']);

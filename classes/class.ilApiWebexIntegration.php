@@ -33,7 +33,7 @@ class ilApiWebexIntegration
 
     private ?int $iliasRefId = null;
 
-    private string $iliasToken = 'abcdefgh87654321';
+    private ?string $iliasToken = null;
 
     //    private ilObjMultiVc $pluginObject;
 
@@ -127,7 +127,7 @@ class ilApiWebexIntegration
         $post = [
             'grant_type' => 'authorization_code',
             'client_id' => $this->pluginConfig->getSvrUsername(),
-            'client_secret' => $this->pluginConfig->getSvrSalt(), # rawurlencode('f0d5215f693b19303b5ff8e6795204e4e466524bd8c1bdb77bbabb2575389102'),
+            'client_secret' => $this->pluginConfig->getSvrSalt(),
             'code' => $code,
             'redirect_uri' => $redirectUri
         ];

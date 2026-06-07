@@ -12,5 +12,5 @@ if (window.opener && typeof(window.opener) != "undefined") {
   });
 }
 window.setTimeout(function() {
-  window.location.href = "{REDIRECTURL}";
+  window.location.href = {REDIRECTURL};
 }, 2000);

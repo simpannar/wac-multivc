@@ -334,7 +334,8 @@ class ilMultiVcTableGUIScheduledMeetings extends ilTable2GUI
                         'id' => 'deleteMeeting_' . $a_set['rel_id'] . '_', //ref_id
                         'title' => $this->dic->language()->txt('rep_robj_xmvc_modal_delete_scheduled_' . $this->parent_obj->sessType . '_title'),
                         'body' => implode(' ', [
-                            '<b>' . $json->title . '</b>',
+                            // Title comes from the external VC API and is rendered via innerHTML — escape it.
+                            '<b>' . htmlspecialchars((string) $json->title, ENT_QUOTES) . '</b>',
                             $a_set['start'],
                             '-',
                             $a_set['end']
@@ -367,7 +368,8 @@ class ilMultiVcTableGUIScheduledMeetings extends ilTable2GUI
     protected function fillRow(array $a_set): void
     {
         $this->tpl->setVariable('ROW_CSS', $a_set['ROW_CSS']);
-        $this->tpl->setVariable('TITLE', $a_set['TITLE']);
+        // Meeting title originates from the external VC API — escape against stored XSS.
+        $this->tpl->setVariable('TITLE', htmlspecialchars((string) $a_set['TITLE'], ENT_QUOTES));
         $startTime = new ilDateTime(strtotime($a_set['START_TIME']), IL_CAL_UNIX);
         $endTime = new ilDateTime(strtotime($a_set['END_TIME']), IL_CAL_UNIX);
         $this->tpl->setVariable('START_TIME', ilDatePresentation::formatDate($startTime));

@@ -100,7 +100,7 @@ class ilMultiVcReportLogMaxTableGUI extends ilTable2GUI
         $objMc = new ilObjMultiVc();
         $dbTableData = $objMc->getMaxConcurrent();
         foreach ($dbTableData as $row => $column) {
-            if (!(bool) ($logData = unserialize($column['log']))) {
+            if (!(bool) ($logData = unserialize($column['log'], ['allowed_classes' => false]))) {
                 $data[] = array_replace($column, ['url' => '']);
             } else {
                 $newRow = $this->createRowFromLog($column);
@@ -116,7 +116,7 @@ class ilMultiVcReportLogMaxTableGUI extends ilTable2GUI
     private function createRowFromLog(array $row): array
     {
         $data = [];
-        foreach (unserialize($row['log']) as $url => $meetings) {
+        foreach (unserialize($row['log'], ['allowed_classes' => false]) as $url => $meetings) {
             $nMeetings = $nUsers = 0;
             foreach($meetings as $meeting => $users) {
                 $nUsers += $users;

@@ -161,7 +161,8 @@ class ilMultiVcUserLogTableGUI extends ilTable2GUI
     {
         $this->tpl->setVariable('REF', $a_set['REF']);
         $this->tpl->setVariable('USER', $a_set['USER']);
-        $this->tpl->setVariable('DISPLAY_NAME', $a_set['DISPLAY_NAME']);
+        // Guest display name originates from untrusted guest-link input — escape against stored XSS.
+        $this->tpl->setVariable('DISPLAY_NAME', htmlspecialchars((string) $a_set['DISPLAY_NAME'], ENT_QUOTES));
         $this->tpl->setVariable('IS_MODERATOR', $a_set['IS_MODERATOR']);
         $this->tpl->setVariable('JOIN_TIME', $a_set['JOIN_TIME']);
         $this->tpl->setVariable('LEAVE_TIME', $a_set['LEAVE_TIME']);

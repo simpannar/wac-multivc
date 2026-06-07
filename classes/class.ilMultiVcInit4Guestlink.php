@@ -190,7 +190,10 @@ class JoinMeetingByGuestLink
     private function setFormElements(): void
     {
         $input = function ($name, $value, $type = 'text', $title = '', $class = "", $addAttr = "") {
-            return '<input type="' . $type . '" name="' . $name . '" value="' . $value . '" title="' . $title . '" placeholder="' . $title . '" class="' . $class . '"' . $addAttr . ' />';
+            // Escape all interpolated values (display_name comes from untrusted POST);
+            // $addAttr is developer-controlled markup and intentionally left raw.
+            $e = static fn($v): string => htmlspecialchars((string) $v, ENT_QUOTES);
+            return '<input type="' . $e($type) . '" name="' . $e($name) . '" value="' . $e($value) . '" title="' . $e($title) . '" placeholder="' . $e($title) . '" class="' . $e($class) . '"' . $addAttr . ' />';
         };
         $this->formField = [
             'display_name' => $input('display_name', $this->displayName, 'text', $this->getLangVar('guest_displayname_input'), 'form-control'),
@@ -211,8 +214,9 @@ class JoinMeetingByGuestLink
         $this->htmlTpl = new ilTemplate( 'tpl.html5doc.html', true, true, 'public/Customizing/global/plugins/Services/Repository/RepositoryObject/MultiVc', '', true);
         $this->htmlTpl->setVariable('USER_LANG', $this->isoLangCode[$this->userLang]);
         $this->htmlTpl->setVariable('HTTP_BASE', $http_base);
-        $this->htmlTpl->setVariable('MEETING_TITLE', $this->getMeetingTitle() . ' - ' . $this->getLangVar('big_blue_button'));
-        $this->htmlTpl->setVariable('H1', $this->getMeetingTitle() . ' - ' . $this->getLangVar('big_blue_button'));
+        $meetingTitleHeading = htmlspecialchars($this->getMeetingTitle() . ' - ' . $this->getLangVar('big_blue_button'), ENT_QUOTES);
+        $this->htmlTpl->setVariable('MEETING_TITLE', $meetingTitleHeading);
+        $this->htmlTpl->setVariable('H1', $meetingTitleHeading);
         $this->htmlTpl->setVariable('INFO_TOP_MODERATED_M', $this->getLangVar('info_top_moderated_m_bbb'));
         $this->htmlTpl->setVariable('ERR_STATE_INPUT_FIELD', (int) $this->errState['displayname']);
         $this->htmlTpl->setVariable('ERR_MSG_INPUT_FIELD', !$this->errState['displayname'] ? '' : $this->getLangVar('err_msg_displayname'));
