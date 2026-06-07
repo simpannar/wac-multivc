@@ -1,1 +1,5 @@
 /plugin.ini
+
+# Environment files with secrets — never commit. Templates use ".env.example".
+.env
+**/.env
