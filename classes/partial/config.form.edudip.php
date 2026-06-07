@@ -35,7 +35,8 @@ $select->setInfo($pl->txt("info_max_participants_webinar"));
 $combo->addSubItem($select);
 
 
-if(isset($_GET['configureNewMultiVcConn'])) {
+global $DIC;
+if ($DIC->http()->wrapper()->query()->has('configureNewMultiVcConn')) {
     $listTokenUser = new ilHiddenInputGUI('list_token_user');
     $combo->addSubItem($listTokenUser);
     $ul = new ilHiddenInputGUI("new_token_user_email");

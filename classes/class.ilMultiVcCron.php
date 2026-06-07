@@ -8,7 +8,11 @@
  * @author      Uwe Kohnle <kohnle@internetlehrer-gmbh.de>
  */
 
-class ilMultiVcCron extends ilCronJob
+use ILIAS\Cron\CronJob;
+use ILIAS\Cron\Job\JobResult;
+use ILIAS\Cron\Job\Schedule\JobScheduleType;
+
+class ilMultiVcCron extends CronJob
 {
     protected \ILIAS\DI\Container $dic;
     public const JOB_ID = 'multivc_lp';
@@ -36,9 +40,9 @@ class ilMultiVcCron extends ilCronJob
         return $this->dic->language()->txt("rep_robj_xmvc_cronjob_description");
     }
 
-    public function getDefaultScheduleType(): \ILIAS\Cron\Schedule\CronJobScheduleType
+    public function getDefaultScheduleType(): JobScheduleType
     {
-        return \ILIAS\Cron\Schedule\CronJobScheduleType::SCHEDULE_TYPE_DAILY;
+        return JobScheduleType::DAILY;
     }
 
     public function getDefaultScheduleValue(): int
@@ -56,16 +60,16 @@ class ilMultiVcCron extends ilCronJob
         return false;
     }
 
-    public function run(): ilCronJobResult
+    public function run(): JobResult
     {
-        $cronResult = new ilCronJobResult();
-        $cronResult->setStatus(ilCronJobResult::STATUS_NO_ACTION);
+        $cronResult = new JobResult();
+        $cronResult->setStatus(JobResult::STATUS_NO_ACTION);
 
         try {
             $this->execJob();
-            $cronResult->setStatus(ilCronJobResult::STATUS_OK);
+            $cronResult->setStatus(JobResult::STATUS_OK);
         } catch(Exception $e) {
-            $cronResult->setStatus(ilCronJobResult::STATUS_FAIL);
+            $cronResult->setStatus(JobResult::STATUS_FAIL);
             $this->dic->logger()->root()->log($e->getMessage());
         }
 
