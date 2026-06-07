@@ -360,7 +360,8 @@ class ilApiEdudip implements ilApiInterface
     private function setDisplayName(): void
     {
         global $DIC;
-        $this->displayName = $DIC->user()->firstname . ' ' . $DIC->user()->lastname;
+        // ILIAS 9+: ilObjUser properties are no longer public — use getters.
+        $this->displayName = $DIC->user()->getFirstname() . ' ' . $DIC->user()->getLastname();
     }
 
     public function getParentObj(): bool|ilObject
